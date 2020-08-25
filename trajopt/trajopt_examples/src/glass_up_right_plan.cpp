@@ -231,13 +231,13 @@ while(ros::ok())
     if(sign==1)
     {
       std::unordered_map<std::string, double> ipos;
-      ipos["arm_left_1_joint"] = -0.4;
-      ipos["arm_left_2_joint"] = 0.2762;
-      ipos["arm_left_3_joint"] = 0.0;
-      ipos["arm_left_4_joint"] = -1.3348;
-      ipos["arm_left_5_joint"] = 0.0;
-      ipos["arm_left_6_joint"] = 1.4959;
-      ipos["arm_left_7_joint"] = 0.0;
+      ipos["joint_a1"] = -0.4;
+      ipos["joint_a2"] = 0.2762;
+      ipos["joint_a3"] = 0.0;
+      ipos["joint_a4"] = -1.3348;
+      ipos["joint_a5"] = 0.0;
+      ipos["joint_a6"] = 1.4959;
+      ipos["joint_a7"] = 0.0;
       //end_pos << 0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0;
       env_->setState(ipos);
       plotter->plotScene();
@@ -317,13 +317,13 @@ while(ros::ok())
     else
     {
       std::unordered_map<std::string, double> ipos;
-      ipos["arm_left_1_joint"] = 0.4;
-      ipos["arm_left_2_joint"] = 0.2762;
-      ipos["arm_left_3_joint"] = 0.0;
-      ipos["arm_left_4_joint"] = -1.3348;
-      ipos["arm_left_5_joint"] = 0.0;
-      ipos["arm_left_6_joint"] = 1.4959;
-      ipos["arm_left_7_joint"] = 0.0;
+        ipos["joint_a1"] = 0.4;
+        ipos["joint_a2"] = 0.2762;
+      ipos["joint_a3"] = 0.0;
+      ipos["joint_a4"] = -1.3348;
+      ipos["joint_a5"] = 0.0;
+      ipos["joint_a6"] = 1.4959;
+      ipos["joint_a7"] = 0.0;
       //end_pos << -0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0;
       env_->setState(ipos);
       plotter->plotScene();
