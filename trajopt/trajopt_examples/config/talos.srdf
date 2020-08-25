@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<robot name="talos">
+
+    <group name="l_arm">
+        <joint name="arm_left_2_joint" />
+        <joint name="arm_left_3_joint" />
+        <joint name="arm_left_4_joint" />
+        <joint name="arm_left_5_joint" />
+        <joint name="arm_left_6_joint" />
+        <joint name="arm_left_7_joint" />
+        <joint name="wrist_left_ft_joint" />
+        <joint name="wrist_left_tool_joint" />
+        <chain base_link="arm_left_1_link" tip_link="wrist_left_ft_tool_link" />
+    </group>
+ 
+
+    <passive_joint name="gripper_left_motor_single_joint" />
+    <passive_joint name="gripper_left_inner_double_joint" />
+    <passive_joint name="gripper_left_fingertip_1_joint" />
+    <passive_joint name="gripper_left_fingertip_2_joint" />
+    <passive_joint name="gripper_left_inner_single_joint" />
+    <passive_joint name="gripper_left_fingertip_3_joint" />
+        <passive_joint name="wrist_left_ft_joint" />
+        <passive_joint name="wrist_left_tool_joint" />
+        <passive_joint name="gripper_left_base_link_joint"/>
+    
+
+    <rotor_params>
+        <joint name="arm_left_2_joint" mass="1e-5" gear_ratio="100." />
+        <joint name="arm_left_3_joint" mass="1e-5" gear_ratio="100." />
+        <joint name="arm_left_4_joint" mass="1e-5" gear_ratio="100." />
+        <joint name="arm_left_5_joint" mass="1e-5" gear_ratio="100." />
+        <joint name="arm_left_6_joint" mass="1e-5" gear_ratio="100." />
+        <joint name="arm_left_7_joint" mass="1e-5" gear_ratio="100." />
+   </rotor_params>
+    
+
+    <!--
+       Talos Specificities.
+           foot height = y axis
+           foot width  = x axis
+           foot depth  = z axis-->
+  
+
+
+  
+
+    <gripper name="left_gripper" clearance="0.03">
+      <position> 0 0 -0.13 0.707106 0 0.707106 0</position>
+      <link name="gripper_left_base_link" />
+      <joint name="gripper_left_joint" />
+      <torque_constant value="48e-3" unit="N.m/A"/>
+    </gripper>
+
+ 
+</robot>

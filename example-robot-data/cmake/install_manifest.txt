@@ -1,0 +1,4 @@
+/usr/local/include/example-robot-data/config.hh
+/usr/local/include/example-robot-data/deprecated.hh
+/usr/local/include/example-robot-data/warning.hh
+/usr/local/lib/pkgconfig/example-robot-data.pc

@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/blaz/optimized_planning_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/blaz/optimized_planning_ws/src/tesseract/tesseract_collision/include/**",
+        "/home/blaz/optimized_planning_ws/src/tesseract/tesseract_core/include/**",
+        "/home/blaz/optimized_planning_ws/src/tesseract/tesseract_monitoring/include/**",
+        "/home/blaz/optimized_planning_ws/src/tesseract/tesseract_planning/include/**",
+        "/home/blaz/optimized_planning_ws/src/tesseract/tesseract_ros/include/**",
+        "/home/blaz/optimized_planning_ws/src/tesseract/tesseract_rviz/include/**",
+        "/home/blaz/optimized_planning_ws/src/trajopt/trajopt/include/**",
+        "/home/blaz/optimized_planning_ws/src/trajopt/trajopt_examples/include/**",
+        "/home/blaz/optimized_planning_ws/src/trajopt/trajopt_sco/include/**",
+        "/home/blaz/optimized_planning_ws/src/trajopt/trajopt_utils/include/**",
+        "/home/blaz/optimized_planning_ws/src/trajopt/trajopt_ext/vhacd_ros/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+<launch>
+  <arg name="robot_description" default="robot_description"/>
+  <arg name="model" />
+  <param name="robot_description" textfile="$(find trajopt_examples)/urdf/talos_left_arm.urdf" />
+    <param name="$(arg robot_description)_semantic" textfile="/home/blaz/optimized_planning_ws/src/trajopt/trajopt_examples/config/talos.srdf" />
+  <param name="use_gui" value="true"/>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" />
+
+</launch>
