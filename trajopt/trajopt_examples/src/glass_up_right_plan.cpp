@@ -230,7 +230,10 @@ while(ros::ok())
   else{
     if(sign==1)
     {
+      ROS_ERROR("you're here");
       std::unordered_map<std::string, double> ipos;
+      ROS_ERROR("you're here");
+
       //ipos["arm_left_1_joint"] = -0.4;
       ipos["arm_left_2_joint"] = -0.2762;
       ipos["arm_left_3_joint"] = 0.0;
@@ -238,15 +241,26 @@ while(ros::ok())
       ipos["arm_left_5_joint"] = 0.0;
       ipos["arm_left_6_joint"] = 1.4959;
       ipos["arm_left_7_joint"] = 0.0;
+      ROS_ERROR("you're here");
+
       //end_pos << 0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0;
       env_->setState(ipos);
+      ROS_ERROR("you're here");
+
       plotter->plotScene();
+      ROS_ERROR("you're here");
+
       // Set Log Level
       util::gLogLevel = util::LevelInfo;
       // Setup Problem
+      ROS_ERROR("you're here");
+
       TrajOptProbPtr prob;
       if (method_ == "cpp")
         prob = cppMethod();
+      ROS_ERROR("you're here");
+    
+    
     
 
       // Solve Trajectory
@@ -256,17 +270,20 @@ while(ros::ok())
       ContinuousContactManagerBasePtr manager = prob->GetEnv()->getContinuousContactManager();
       manager->setActiveCollisionObjects(prob->GetKin()->getLinkNames());
       manager->setContactDistanceThreshold(0);
+      ROS_ERROR("you're here");
 
       bool found = tesseract::continuousCollisionCheckTrajectory(
           *manager, *prob->GetEnv(), *prob->GetKin(), prob->GetInitTraj(), collisions);
 
       ROS_INFO((found) ? ("Initial trajectory is in collision") : ("Initial trajectory is collision free"));
+      ROS_ERROR("you're here");
 
       sco::BasicTrustRegionSQP opt(prob);
       if (plotting_)
       {
         opt.addCallback(PlotCallback(*prob, plotter));
       }
+      ROS_ERROR("you're here");
 
       std::shared_ptr<std::ofstream> stream_ptr;
       if (write_to_file_)
@@ -277,10 +294,15 @@ while(ros::ok())
         stream_ptr->open(path, std::ofstream::out | std::ofstream::trunc);
         opt.addCallback(trajopt::WriteCallback(stream_ptr, prob));
       } 
+      ROS_ERROR("you're here");
 
       opt.initialize(trajToDblVec(prob->GetInitTraj()));
       ros::Time start= ros::Time::now();
+      ROS_ERROR("you've got far");
+
       opt.optimize();//la baguette magique ? la baguette magique. /home/blaz/optimized_planning_ws/src/trajopt/trajopt_sco/src/optimizers.cpp
+      ROS_ERROR("very far");
+
       ROS_ERROR("%.3f",(ros::Time::now()-start).toSec());
 
       double d = 0;
@@ -309,14 +331,22 @@ while(ros::ok())
 
       ROS_INFO((found) ? ("Final trajectory is in collision") : ("Final trajectory is collision free"));
       sign =-1;     
+      ROS_ERROR("you even finished");
+
       ros::spinOnce();
+
       ROS_ERROR("Press ENTER twice to start calculating a new trajectory");
       getchar();
+
 
     }
     else
     {
+      ROS_ERROR("you're here");
+
       std::unordered_map<std::string, double> ipos;
+      ROS_ERROR("you're here");
+
       //ipos["arm_left_1_joint"] = 0.4;
       ipos["arm_left_2_joint"] = 0.2762;
       ipos["arm_left_3_joint"] = 0.0;
@@ -324,19 +354,29 @@ while(ros::ok())
       ipos["arm_left_5_joint"] = 0.0;
       ipos["arm_left_6_joint"] = 1.4959;
       ipos["arm_left_7_joint"] = 0.0;
+      ROS_ERROR("you're here");
+
       //end_pos << -0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0;
       env_->setState(ipos);
+      ROS_ERROR("you're here");
+
       plotter->plotScene();
+      ROS_ERROR("you're here");
+
       // Set Log Level
       util::gLogLevel = util::LevelInfo;
       // Setup Problem
       TrajOptProbPtr prob;
+      ROS_ERROR("you're here");
+
       if (method_ == "cpp")
         prob = cppMethod();
   
+      ROS_ERROR("you're here");
 
       // Solve Trajectory
       ROS_INFO("glass upright plan example");
+      ROS_ERROR("you're here");
 
       std::vector<tesseract::ContactResultMap> collisions;
       ContinuousContactManagerBasePtr manager = prob->GetEnv()->getContinuousContactManager();
@@ -347,12 +387,14 @@ while(ros::ok())
           *manager, *prob->GetEnv(), *prob->GetKin(), prob->GetInitTraj(), collisions);
 
       ROS_INFO((found) ? ("Initial trajectory is in collision") : ("Initial trajectory is collision free"));
+      ROS_ERROR("you're here");
 
       sco::BasicTrustRegionSQP opt(prob);
       if (plotting_)
       {
         opt.addCallback(PlotCallback(*prob, plotter));
       }
+      ROS_ERROR("you're here");
 
       std::shared_ptr<std::ofstream> stream_ptr;
       if (write_to_file_)
@@ -363,10 +405,15 @@ while(ros::ok())
         stream_ptr->open(path, std::ofstream::out | std::ofstream::trunc);
         opt.addCallback(trajopt::WriteCallback(stream_ptr, prob));
       }
+      ROS_ERROR("you're here");
 
       opt.initialize(trajToDblVec(prob->GetInitTraj()));
       ros::Time start= ros::Time::now();
+      ROS_ERROR("you even got far");
+
       opt.optimize();//la baguette magique ? la baguette magique. /home/blaz/optimized_planning_ws/src/trajopt/trajopt_sco/src/optimizers.cpp
+      ROS_ERROR("very far");
+
       ROS_ERROR("%.3f",(ros::Time::now()-start).toSec());
       double d = 0;
       TrajArray traj = getTraj(opt.x(), prob->GetVars());
@@ -394,10 +441,13 @@ while(ros::ok())
 
       ROS_INFO((found) ? ("Final trajectory is in collision") : ("Final trajectory is collision free"));
       sign =1;
+      ROS_ERROR("you even finished");
+
       ros::spinOnce();
       ROS_ERROR("Press ENTER twice to start calculating a new trajectory");
 
       getchar();
+
     } 
   }
   return 0;

@@ -774,6 +774,7 @@ void KDLEnv::loadContinuousContactManagerPlugin(const std::string& plugin)
     for (const auto& ab : attached_bodies_)
       continuous_manager_->enableCollisionObject(ab.second.object_name);
   }
+  ROS_ERROR("A FINI KDL_ENV.cpp");
 }
 }
 }
