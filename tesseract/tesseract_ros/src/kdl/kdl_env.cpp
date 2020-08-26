@@ -136,10 +136,10 @@ bool KDLEnv::init(urdf::ModelInterfaceConstSharedPtr urdf_model, srdf::ModelCons
 
       if (!group.joints_.empty())
       {
-        ROS_ERROR_STREAM( group.joints_.size() );
+        //ROS_ERROR_STREAM( group.joints_.size() );
         for (unsigned i=0; i<group.joints_.size();i++)
         {
-          ROS_ERROR_STREAM(group.joints_[i]);
+          //ROS_ERROR_STREAM(group.joints_[i]);
         }
         addManipulator(group.joints_, group.name_);
       }
@@ -567,6 +567,7 @@ bool KDLEnv::setJointValuesHelper(KDL::JntArray& q, const std::string& joint_nam
   auto qnr = joint_to_qnr_.find(joint_name);
   if (qnr != joint_to_qnr_.end())
   {
+    ROS_ERROR(joint_name.c_str());
     q(qnr->second) = joint_value;
     return true;
   }

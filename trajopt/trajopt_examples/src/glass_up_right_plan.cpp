@@ -231,8 +231,8 @@ while(ros::ok())
     if(sign==1)
     {
       std::unordered_map<std::string, double> ipos;
-      ipos["arm_left_1_joint"] = -0.4;
-      ipos["arm_left_2_joint"] = 0.2762;
+      //ipos["arm_left_1_joint"] = -0.4;
+      ipos["arm_left_2_joint"] = -0.2762;
       ipos["arm_left_3_joint"] = 0.0;
       ipos["arm_left_4_joint"] = -1.3348;
       ipos["arm_left_5_joint"] = 0.0;
@@ -317,7 +317,7 @@ while(ros::ok())
     else
     {
       std::unordered_map<std::string, double> ipos;
-      ipos["arm_left_1_joint"] = 0.4;
+      //ipos["arm_left_1_joint"] = 0.4;
       ipos["arm_left_2_joint"] = 0.2762;
       ipos["arm_left_3_joint"] = 0.0;
       ipos["arm_left_4_joint"] = -1.3348;
