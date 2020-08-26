@@ -191,7 +191,6 @@ beginning:
 
     sphere_pose.translation() = Eigen::Vector3d(x_sphere,y_sphere,z_sphere);  // coordonnées de la sphere selon x y z  posinit=(0.5, 0, 0.55)
 
-
     obj->name = "sphere_attached";
     obj->visual.shapes.push_back(sphere);
     obj->visual.shape_poses.push_back(sphere_pose);

@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   genmsg
+  convex_decomposition
   
   
 
@@ -30,12 +31,12 @@ generate_messages(
   geometry_msgs
 )
 
-find_package(PCL REQUIRED COMPONENTS core features filters io segmentation surface)
-find_package(example-robot-data)
+find_package(PCL REQUIRED COMPONENTS core features filters io segmentation surface )
+find_package(example-robot-data )
 
 
 catkin_package(
-  CATKIN_DEPENDS geometry_msgs roscpp std_msgs message_runtime
+  CATKIN_DEPENDS geometry_msgs roscpp std_msgs message_runtime 
 )
 
 
@@ -75,7 +76,7 @@ target_compile_options(${PROJECT_NAME}_puzzle_piece_auxillary_axes_plan PRIVATE 
 
 # Mark executables and/or libraries for installation
 install(
-  TARGETS ${PROJECT_NAME}_basic_cartesian_plan ${PROJECT_NAME}_glass_up_right_plan ${PROJECT_NAME}_puzzle_piece_plan ${PROJECT_NAME}_car_seat_demo ${PROJECT_NAME}_puzzle_piece_auxillary_axes_plan
+  TARGETS my_publisher ${PROJECT_NAME}_basic_cartesian_plan ${PROJECT_NAME}_glass_up_right_plan ${PROJECT_NAME}_puzzle_piece_plan ${PROJECT_NAME}_car_seat_demo ${PROJECT_NAME}_puzzle_piece_auxillary_axes_plan 
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
