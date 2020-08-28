@@ -1,19 +1,20 @@
 <?xml version="1.0" ?>
 <robot name="talos">
 
-    <group name="l_arm">
+    <group name="manipulator">
         <joint name="arm_left_2_joint" />
         <joint name="arm_left_3_joint" />
         <joint name="arm_left_4_joint" />
         <joint name="arm_left_5_joint" />
         <joint name="arm_left_6_joint" />
         <joint name="arm_left_7_joint" />
-        <joint name="wrist_left_ft_joint" />
-        <joint name="wrist_left_tool_joint" />
+
         <chain base_link="arm_left_1_link" tip_link="wrist_left_ft_tool_link" />
+   
     </group>
  
-
+        <passive_joint name="wrist_left_ft_joint" />
+        <passive_joint name="wrist_left_tool_joint" />
     <passive_joint name="gripper_left_motor_single_joint" />
     <passive_joint name="gripper_left_inner_double_joint" />
     <passive_joint name="gripper_left_fingertip_1_joint" />

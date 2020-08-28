@@ -136,10 +136,10 @@ bool KDLEnv::init(urdf::ModelInterfaceConstSharedPtr urdf_model, srdf::ModelCons
 
       if (!group.joints_.empty())
       {
-        //ROS_ERROR_STREAM( group.joints_.size() );
+        ROS_ERROR_STREAM( group.joints_.size() );
         for (unsigned i=0; i<group.joints_.size();i++)
         {
-          //ROS_ERROR_STREAM(group.joints_[i]);
+          ROS_ERROR_STREAM(group.joints_[i]);
         }
         addManipulator(group.joints_, group.name_);
       }
@@ -294,6 +294,8 @@ EnvStatePtr KDLEnv::getState(const std::vector<std::string>& joint_names,
 
 Eigen::VectorXd KDLEnv::getCurrentJointValues() const
 {
+  ROS_ERROR("test getCurrentJointValues");
+
   Eigen::VectorXd jv;
   jv.resize(static_cast<long int>(joint_names_.size()));
   for (auto j = 0u; j < joint_names_.size(); ++j)
@@ -304,7 +306,9 @@ Eigen::VectorXd KDLEnv::getCurrentJointValues() const
 }
 
 Eigen::VectorXd KDLEnv::getCurrentJointValues(const std::string& manipulator_name) const
-{
+{ 
+  ROS_ERROR("test getCurrentJointValues");
+
   auto it = manipulators_.find(manipulator_name);
   if (it != manipulators_.end())
   {
@@ -379,15 +383,22 @@ bool KDLEnv::hasManipulator(const std::string& manipulator_name) const
 
 BasicKinConstPtr KDLEnv::getManipulator(const std::string& manipulator_name) const
 {
-  auto it = manipulators_.find(manipulator_name);
-  if (it != manipulators_.end())
-    return it->second;
+  ROS_ERROR("test get manipulator 1");
 
+  auto it = manipulators_.find(manipulator_name); // peut_etre que le code n'arrive pas a trouver ce qu'il veut
+  ROS_ERROR("a reussi a trouver manipulator_name"); 
+  if (it != manipulators_.end()) // si it non null ? 
+  {
+    ROS_ERROR("!= end");
+    return it->second;
+  }
+  ROS_ERROR("renvoie nullptr");
   return nullptr;
 }
 
 std::string KDLEnv::getManipulatorName(const std::vector<std::string>& joint_names) const
 {
+  ROS_ERROR("test get manipulator 2");
   std::set<std::string> joint_names_set(joint_names.begin(), joint_names.end());
   for (const auto& manip : manipulators_)
   {
@@ -567,7 +578,6 @@ bool KDLEnv::setJointValuesHelper(KDL::JntArray& q, const std::string& joint_nam
   auto qnr = joint_to_qnr_.find(joint_name);
   if (qnr != joint_to_qnr_.end())
   {
-    ROS_ERROR(joint_name.c_str());
     q(qnr->second) = joint_value;
     return true;
   }
@@ -774,7 +784,6 @@ void KDLEnv::loadContinuousContactManagerPlugin(const std::string& plugin)
     for (const auto& ab : attached_bodies_)
       continuous_manager_->enableCollisionObject(ab.second.object_name);
   }
-  ROS_ERROR("A FINI KDL_ENV.cpp");
 }
 }
 }
