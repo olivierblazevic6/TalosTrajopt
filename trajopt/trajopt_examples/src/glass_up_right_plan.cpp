@@ -25,7 +25,6 @@
  */
 
 
-// L'ALPHA INDIQUE L'OPACITE DU ROBOT ET DE L'ENVIRRONEMENT, 0=invisible, 0,5=transparent, 1=opaque.//
 #include <trajopt_utils/macros.h>
 TRAJOPT_IGNORE_WARNINGS_PUSH
 #include <jsoncpp/json/json.h>
@@ -137,10 +136,10 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
     std::shared_ptr<CartPoseTermInfo> pose = std::shared_ptr<CartPoseTermInfo>(new CartPoseTermInfo);
     pose->term_type = TT_CNT;
     pose->name = "waypoint_cart_" + std::to_string(i);
-    pose->link = "tool0";
+    pose->link = "wrist_left_ft_tool_link";
     
     pose->timestep = i;
-    pose->xyz = Eigen::Vector3d(0.0,0,0);// sign*(O,(-0.3 + delta * i), 0.55);
+    pose->xyz = Eigen::Vector3d(0.0,sign*(-0.3 + delta * i), 0.55);
     pose->wxyz = Eigen::Vector4d(0.0, 0.0, 1.0, 0.0);
     
     if (i == (pci.basic_info.n_steps - 1) || i == 0)
@@ -315,7 +314,7 @@ while(ros::ok())
       ROS_ERROR("you've got far");
 
       opt.optimize();//la baguette magique ? la baguette magique. /home/blaz/optimized_planning_ws/src/trajopt/trajopt_sco/src/optimizers.cpp
-      ROS_ERROR("very far");
+      ROS_ERROR("soon over");
 
       ROS_ERROR("%.3f",(ros::Time::now()-start).toSec());
 

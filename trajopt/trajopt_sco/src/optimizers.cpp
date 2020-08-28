@@ -313,23 +313,28 @@ OptStatus BasicTrustRegionSQP::optimize()
     
     {
        /* sqp loop */
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
      // callCallbacks();
 
       ROS_DEBUG("current iterate: %s", CSTR(results_.x));
-      ROS_INFO("iteration %i", iter);
+      ROS_ERROR("iteration %i", iter);
 
       // speedup: if you just evaluated the cost when doing the line search, use
       // that
       if (results_.cost_vals.empty() && results_.cnt_viols.empty())
       {  // only happens on the first iteration
+        ROS_ERROR("where is it ");
         results_.cnt_viols = evaluateConstraintViols(constraints, results_.x);
+        ROS_ERROR("where is it ");
         results_.cost_vals = evaluateCosts(prob_->getCosts(), results_.x);
+        ROS_ERROR("where is it ");
         assert(results_.n_func_evals == 0);
+        ROS_ERROR("where is it ");
+
         ++results_.n_func_evals;
       }
-      ROS_INFO("iteration %i", iter);
+      ROS_ERROR("iteration %i", iter);
       // DblVec new_cnt_viols = evaluateConstraintViols(constraints, results_.x);
       // DblVec new_cost_vals = evaluateCosts(prob_->getCosts(), results_.x);
       // cout << "costs" << endl;
@@ -359,26 +364,26 @@ ROS_INFO("iteration %i", iter);
 
       //    objective = cleanupExpr(objective);
       model_->setObjective(objective);
-      ROS_INFO("iteration %i", iter);
+      ROS_ERROR("iteration %i", iter);
 
-      //*    if (ROSging::filter() >= IPI_LEVEL_DEBUG) {
+      //*    if (ROSging::filter() >= IPI_LEVEL_ERROR) {
       //      DblVec model_cost_vals;
       //      for (ConvexObjectivePtr& cost : cost_models) {
       //        model_cost_vals.push_back(cost->value(x));
       //      }
-      //      ROS_DEBUG("model costs %s should equalcosts  %s",
+      //      ROS_ERROR("model costs %s should equalcosts  %s",
       //      printer(model_cost_vals), printer(cost_vals));
       //    }
       while (param_.trust_box_size >= param_.min_trust_box_size)
       {
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
         setTrustBoxConstraints(results_.x);
         CvxOptStatus status = model_->optimize();
         ++results_.n_qp_solves;
         if (status != CVX_SOLVED)
         {
-          ROS_ERROR("convex solver failed! set TRAJOPT_ROS_THRESH=DEBUG to see "
+          ROS_ERROR("convex solver failed! set TRAJOPT_ROS_THRESH=ERROR to see "
                     "solver output. saving model to /tmp/fail.lp and IIS to "
                     "/tmp/fail.ilp");
           model_->writeToFile("/tmp/fail.lp");
@@ -394,7 +399,7 @@ ROS_INFO("iteration %i", iter);
         // the n variables of the OptProb happen to be the first n variables in
         // the Model
         DblVec new_x(model_var_vals.begin(), model_var_vals.begin() + static_cast<long int>(results_.x.size()));
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
         if (util::GetLogLevel() >= util::LevelDebug)
         {
@@ -402,11 +407,11 @@ ROS_INFO("iteration %i", iter);
           DblVec cnt_costs2 = model_cnt_viols;
           for (unsigned i = 0; i < cnt_costs2.size(); ++i)
             cnt_costs2[i] *= param_.merit_error_coeff;
-          ROS_DEBUG("SHOULD BE ALMOST THE SAME: %s ?= %s", CSTR(cnt_costs1), CSTR(cnt_costs2));
+          ROS_ERROR("SHOULD BE ALMOST THE SAME: %s ?= %s", CSTR(cnt_costs1), CSTR(cnt_costs2));
           // not exactly the same because cnt_costs1 is based on aux variables,
           // but they might not be at EXACTLY the right value
         }
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
         DblVec new_cost_vals = evaluateCosts(prob_->getCosts(), new_x);
         DblVec new_cnt_viols = evaluateConstraintViols(constraints, new_x);
@@ -418,7 +423,7 @@ ROS_INFO("iteration %i", iter);
         double approx_merit_improve = old_merit - model_merit;
         double exact_merit_improve = old_merit - new_merit;
         double merit_improve_ratio = exact_merit_improve / approx_merit_improve;
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
         if (util::GetLogLevel() >= util::LevelInfo)
         {
@@ -438,7 +443,7 @@ ROS_INFO("iteration %i", iter);
                       exact_merit_improve,
                       merit_improve_ratio);
         }
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
         if (approx_merit_improve < -1e-5)
         {
@@ -446,21 +451,21 @@ ROS_INFO("iteration %i", iter);
                     "(convexification is probably wrong to zeroth order)",
                     approx_merit_improve);
         }
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
         if (approx_merit_improve < param_.min_approx_improve)
         {
-          ROS_INFO(
+          ROS_ERROR(
               "converged because improvement was small (%.3e < %.3e)", approx_merit_improve, param_.min_approx_improve);
           retval = OPT_CONVERGED;
 
           goto penaltyadjustment;
         }
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
         if (approx_merit_improve / old_merit < param_.min_approx_improve_frac)
         {
-          ROS_INFO("converged because improvement ratio was small (%.3e < %.3e)",
+          ROS_ERROR("converged because improvement ratio was small (%.3e < %.3e)",
                    approx_merit_improve / old_merit,
                    param_.min_approx_improve_frac);
           retval = OPT_CONVERGED;
@@ -471,7 +476,7 @@ ROS_INFO("iteration %i", iter);
         else if (exact_merit_improve < 0 || merit_improve_ratio < param_.improve_ratio_threshold)
         {
           adjustTrustRegion(param_.trust_shrink_ratio);
-          ROS_INFO("shrunk trust region. new box size: %.4f", param_.trust_box_size);
+          ROS_ERROR("shrunk trust region. new box size: %.4f", param_.trust_box_size);
         }
 
         else
@@ -480,16 +485,16 @@ ROS_INFO("iteration %i", iter);
           results_.cost_vals = new_cost_vals;
           results_.cnt_viols = new_cnt_viols;
           adjustTrustRegion(param_.trust_expand_ratio);
-          ROS_INFO("expanded trust region. new box size: %.4f", param_.trust_box_size);
+          ROS_ERROR("expanded trust region. new box size: %.4f", param_.trust_box_size);
           break;
         }
 
       }
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
       if (param_.trust_box_size < param_.min_trust_box_size)
       {
-        ROS_INFO("converged because trust region is tiny");
+        ROS_ERROR("converged because trust region is tiny");
         retval = OPT_CONVERGED;
 
         goto penaltyadjustment;
@@ -497,38 +502,38 @@ ROS_INFO("iteration %i", iter);
 
       else if (iter >= param_.max_iter)
       {
-        ROS_INFO("iteration limit");
+        ROS_ERROR("iteration limit");
         retval = OPT_SCO_ITERATION_LIMIT;
 
         goto penaltyadjustment;
       }
-ROS_INFO("iteration %i", iter);
+ROS_ERROR("iteration %i", iter);
 
     }
   penaltyadjustment:
     if (results_.cnt_viols.empty() || vecMax(results_.cnt_viols) < param_.cnt_tolerance)
     {
       if (results_.cnt_viols.size() > 0)
-        ROS_INFO("woo-hoo! constraints are satisfied (to tolerance %.2e)", param_.cnt_tolerance);
+        ROS_ERROR("woo-hoo! constraints are satisfied (to tolerance %.2e)", param_.cnt_tolerance);
       goto cleanup;
     }
     else
     {
-      ROS_INFO("not all constraints are satisfied. increasing penalties");
+      ROS_ERROR("not all constraints are satisfied. increasing penalties");
       param_.merit_error_coeff *= param_.merit_coeff_increase_ratio;
       param_.trust_box_size = fmax(param_.trust_box_size, param_.min_trust_box_size / param_.trust_shrink_ratio * 1.5);
     }
 
   }
   retval = OPT_PENALTY_ITERATION_LIMIT;
-  ROS_INFO("optimization couldn't satisfy all constraints");
+  ROS_ERROR("optimization couldn't satisfy all constraints");
 
 cleanup:
   
   assert(retval != INVALID && "should never happen");
   results_.status = retval;
   results_.total_cost = vecSum(results_.cost_vals);
-  ROS_INFO("\n==================\n%s==================", CSTR(results_));
+  ROS_ERROR("\n==================\n%s==================", CSTR(results_));
   callCallbacks();
 
   return retval;
