@@ -91,7 +91,7 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
   end_pos.resize(pci.kin->numJoints()); //également
   ROS_ERROR("Ou est l'erreur");
 
-  end_pos << sign*0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
+  end_pos << 0.0 , 0.0, 0.0, sign*0.1, 0.0, 0.0, 0.0; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
   ROS_ERROR("Ou est l'erreur");
 
   pci.init_info.type = InitInfo::GIVEN_TRAJ;
@@ -130,7 +130,7 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
   pci.cost_infos.push_back(collision);
 
   // Populate Constraints
-  double delta = 0.6 / pci.basic_info.n_steps;
+  double delta = 0.2 / pci.basic_info.n_steps;
   for (auto i = 0; i < pci.basic_info.n_steps; ++i)
   {
     std::shared_ptr<CartPoseTermInfo> pose = std::shared_ptr<CartPoseTermInfo>(new CartPoseTermInfo);
@@ -139,7 +139,7 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
     pose->link = "wrist_left_ft_tool_link";
     
     pose->timestep = i;
-    pose->xyz = Eigen::Vector3d(0.0,sign*(-0.3 + delta * i), 0.55);
+    pose->xyz = Eigen::Vector3d(0.0,sign*(-0.1 + delta * i), 0);
     pose->wxyz = Eigen::Vector4d(0.0, 0.0, 1.0, 0.0);
     
     if (i == (pci.basic_info.n_steps - 1) || i == 0)
@@ -246,10 +246,10 @@ while(ros::ok())
       std::unordered_map<std::string, double> ipos;
      
 
-      ipos["arm_left_1_joint"] = -0.4;
+      ipos["arm_left_1_joint"] = 0;
       ipos["arm_left_2_joint"] = 0;
       ipos["arm_left_3_joint"] = 0.0;
-      ipos["arm_left_4_joint"] = 0;
+      ipos["arm_left_4_joint"] = -0.1;
       ipos["arm_left_5_joint"] = 0.0;
       ipos["arm_left_6_joint"] = 0;
       ipos["arm_left_7_joint"] = 0.0;
@@ -359,10 +359,10 @@ while(ros::ok())
       std::unordered_map<std::string, double> ipos;
      
 
-      ipos["arm_left_1_joint"] = 0.4;
+      ipos["arm_left_1_joint"] = 0;
       ipos["arm_left_2_joint"] = 0;
       ipos["arm_left_3_joint"] = 0.0;
-      ipos["arm_left_4_joint"] = 0;
+      ipos["arm_left_4_joint"] = 0.1;
       ipos["arm_left_5_joint"] = 0.0;
       ipos["arm_left_6_joint"] = 0;
       ipos["arm_left_7_joint"] = 0.0;
