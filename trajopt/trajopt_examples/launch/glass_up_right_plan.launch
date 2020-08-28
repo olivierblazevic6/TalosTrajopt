@@ -20,11 +20,6 @@
    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
    <node name="rviz" pkg="rviz" type="rviz" />
 
-   
-  
-
-  <!-- Load universal robot description format (URDF) // bah nan ?
-  <param name="$(arg trajopt_description)" textfile="$(find trajopt_examples)/config/glass_up_right_plan.json"/>-->
 
   <!-- Load universal robot description format (URDF) -->
   <param name="$(arg robot_description)" textfile="$(find trajopt_examples)/urdf/talos_left_arm.urdf" />

@@ -91,7 +91,7 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
   end_pos.resize(pci.kin->numJoints()); //également
   ROS_ERROR("Ou est l'erreur");
 
-  end_pos << 0,0,0,0,0,0,0;//sign*0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0; POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
+  end_pos << sign*0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
   ROS_ERROR("Ou est l'erreur");
 
   pci.init_info.type = InitInfo::GIVEN_TRAJ;
@@ -104,8 +104,8 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
   
   // Populate Cost Info
   std::shared_ptr<JointVelTermInfo> jv = std::shared_ptr<JointVelTermInfo>(new JointVelTermInfo);
-  jv->coeffs = std::vector<double>(6, 1.0);
-  jv->targets = std::vector<double>(6, 0.0);
+  jv->coeffs = std::vector<double>(7, 1.0);
+  jv->targets = std::vector<double>(7, 0.0);
   jv->first_step = 0;
   jv->last_step = pci.basic_info.n_steps - 1;
   jv->name = "joint_vel";
@@ -240,17 +240,18 @@ while(ros::ok())
     goto beginning;
   }
   else{
+    if (sign ==1){
     
      
       std::unordered_map<std::string, double> ipos;
      
 
-      //ipos["arm_left_1_joint"] = -0.4;
-      ipos["arm_left_2_joint"] = 0.0;
+      ipos["arm_left_1_joint"] = -0.4;
+      ipos["arm_left_2_joint"] = 0;
       ipos["arm_left_3_joint"] = 0.0;
-      ipos["arm_left_4_joint"] = 0.0;
+      ipos["arm_left_4_joint"] = 0;
       ipos["arm_left_5_joint"] = 0.0;
-      ipos["arm_left_6_joint"] = 0.0;
+      ipos["arm_left_6_joint"] = 0;
       ipos["arm_left_7_joint"] = 0.0;
 
       ROS_ERROR("you're here");
@@ -351,6 +352,121 @@ while(ros::ok())
       ROS_ERROR("Press ENTER twice to start calculating a new trajectory");
       getchar();
 
+    }
+    else{
+    
+     
+      std::unordered_map<std::string, double> ipos;
+     
+
+      ipos["arm_left_1_joint"] = 0.4;
+      ipos["arm_left_2_joint"] = 0;
+      ipos["arm_left_3_joint"] = 0.0;
+      ipos["arm_left_4_joint"] = 0;
+      ipos["arm_left_5_joint"] = 0.0;
+      ipos["arm_left_6_joint"] = 0;
+      ipos["arm_left_7_joint"] = 0.0;
+
+
+      ROS_ERROR("you're here");
+
+
+      //end_pos << 0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0;
+      env_->setState(ipos);
+      ROS_ERROR("you're here");
+
+      plotter->plotScene();
+      ROS_ERROR("you're here");
+
+      // Set Log Level
+      util::gLogLevel = util::LevelInfo;
+      // Setup Problem
+      ROS_ERROR("you're here");
+
+      TrajOptProbPtr prob;
+      if (method_ == "cpp")
+        prob = cppMethod();
+      ROS_ERROR("you're here");
+    
+    
+    
+
+      // Solve Trajectory
+      ROS_INFO("glass upright plan example");
+
+      std::vector<tesseract::ContactResultMap> collisions;
+      ContinuousContactManagerBasePtr manager = prob->GetEnv()->getContinuousContactManager();
+      manager->setActiveCollisionObjects(prob->GetKin()->getLinkNames());
+      manager->setContactDistanceThreshold(0);
+      ROS_ERROR("you're here");
+
+      bool found = tesseract::continuousCollisionCheckTrajectory(
+          *manager, *prob->GetEnv(), *prob->GetKin(), prob->GetInitTraj(), collisions);
+
+      ROS_INFO((found) ? ("Initial trajectory is in collision") : ("Initial trajectory is collision free"));
+      ROS_ERROR("you're here");
+
+      sco::BasicTrustRegionSQP opt(prob);
+      if (plotting_)
+      {
+        opt.addCallback(PlotCallback(*prob, plotter));
+      }
+      ROS_ERROR("you're here");
+
+      std::shared_ptr<std::ofstream> stream_ptr;
+      if (write_to_file_)
+      {
+        // Create file write callback discarding any of the file's current contents
+        stream_ptr.reset(new std::ofstream);
+        std::string path = ros::package::getPath("trajopt") + "/scripts/glass_up_right_plan.csv";
+        stream_ptr->open(path, std::ofstream::out | std::ofstream::trunc);
+        opt.addCallback(trajopt::WriteCallback(stream_ptr, prob));
+      } 
+      ROS_ERROR("you're here");
+
+      opt.initialize(trajToDblVec(prob->GetInitTraj()));
+      ros::Time start= ros::Time::now();
+      ROS_ERROR("you've got far");
+
+      opt.optimize();//la baguette magique ? la baguette magique. /home/blaz/optimized_planning_ws/src/trajopt/trajopt_sco/src/optimizers.cpp
+      ROS_ERROR("soon over");
+
+      ROS_ERROR("%.3f",(ros::Time::now()-start).toSec());
+
+      double d = 0;
+      TrajArray traj = getTraj(opt.x(), prob->GetVars());
+      
+      for (unsigned i = 1; i < traj.rows(); ++i)
+      {
+        for (unsigned j = 0; j < traj.cols(); ++j)
+        {
+          d += std::abs(traj(i, j) - traj(i - 1, j));
+        }
+      }
+      ROS_ERROR("trajectory norm: %.3f", d);
+      if (plotting_)
+      {
+      plotter->clear();
+      }
+      if (write_to_file_)
+      {
+        stream_ptr->close();
+        ROS_INFO("Data written to file. Evaluate using scripts in trajopt/scripts.");
+      }
+      collisions.clear();
+      found = tesseract::continuousCollisionCheckTrajectory(
+          *manager, *prob->GetEnv(), *prob->GetKin(), prob->GetInitTraj(), collisions);
+
+      ROS_INFO((found) ? ("Final trajectory is in collision") : ("Final trajectory is collision free"));
+      sign =1;     
+      ROS_ERROR("you even finished");
+
+      ros::spinOnce();
+
+      ROS_ERROR("Press ENTER twice to start calculating a new trajectory");
+      getchar();
+
+    }
 
     
   }
