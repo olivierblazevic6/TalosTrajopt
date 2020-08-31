@@ -1,0 +1,13 @@
+controller_list:
+  - name: fake_dz_controller
+    joints:
+      - arm_left_1_joint
+      - arm_left_2_joint
+      - arm_left_3_joint
+      - arm_left_4_joint
+      - arm_left_5_joint
+      - arm_left_6_joint
+      - arm_left_7_joint
+initial:  # Define initial robot poses.
+  - group: dz
+    pose: b

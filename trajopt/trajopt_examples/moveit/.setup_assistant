@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: trajopt_examples
+    relative_path: urdf/talos_left_arm.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/talos.srdf
+  CONFIG:
+    author_name: dz
+    author_email: zdzd@dz.fr
+    generated_timestamp: 1598884107
