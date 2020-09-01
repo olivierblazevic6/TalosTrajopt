@@ -83,17 +83,16 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
 
   // Populate Init Info
   Eigen::VectorXd start_pos = pci.env->getCurrentJointValues(pci.kin->getName()); //ligne problématique, on ne rentre pas dans getCurrentJointValues. problème avec pci.kin->getName()? cf l82
-  ROS_ERROR("Ou est l'erreur");
 
   Eigen::VectorXd end_pos;
-  ROS_ERROR("Ou est l'erreur");
 
   end_pos.resize(pci.kin->numJoints()); //également
-  ROS_ERROR("Ou est l'erreur");
-
-  end_pos << 0.0 , 0.0, 0.0, sign*0.1, 0.0, 0.0, 0.0; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
-  ROS_ERROR("Ou est l'erreur");
-
+  if (sign ==1){
+  end_pos << -1.2236 , 1.1932, 0.0675, -1.3017, 1.2723, -0.7174, -0.0193; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
+  }
+  else {
+  end_pos << -0.136 , 1.1932, 0.0675, -1.3017, 1.2723, -0.7174, -0.0193; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
+  }
   pci.init_info.type = InitInfo::GIVEN_TRAJ;
   pci.init_info.data = TrajArray(steps_, pci.kin->numJoints());// aussi
   for (unsigned idof = 0; idof < pci.kin->numJoints(); ++idof)
@@ -139,7 +138,7 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
     pose->link = "wrist_left_ft_tool_link";
     
     pose->timestep = i;
-    pose->xyz = Eigen::Vector3d(0.0,sign*(-0.1 + delta * i), 0);
+    pose->xyz = Eigen::Vector3d(0.0,sign*(-0. + delta * i), 0);
     pose->wxyz = Eigen::Vector4d(0.0, 0.0, 1.0, 0.0);
     
     if (i == (pci.basic_info.n_steps - 1) || i == 0)
@@ -246,13 +245,13 @@ while(ros::ok())
       std::unordered_map<std::string, double> ipos;
      
 
-      ipos["arm_left_1_joint"] = 0;
-      ipos["arm_left_2_joint"] = 0;
-      ipos["arm_left_3_joint"] = 0.0;
-      ipos["arm_left_4_joint"] = -0.1;
-      ipos["arm_left_5_joint"] = 0.0;
-      ipos["arm_left_6_joint"] = 0;
-      ipos["arm_left_7_joint"] = 0.0;
+      ipos["arm_left_1_joint"] = 0.136;
+      ipos["arm_left_2_joint"] = 1.1932;
+      ipos["arm_left_3_joint"] = 0.0675;
+      ipos["arm_left_4_joint"] = -1.3017;
+      ipos["arm_left_5_joint"] = 1.2723;
+      ipos["arm_left_6_joint"] = -0.7174;
+      ipos["arm_left_7_joint"] =  -0.0193;
 
       ROS_ERROR("you're here");
 
@@ -359,19 +358,20 @@ while(ros::ok())
       std::unordered_map<std::string, double> ipos;
      
 
-      ipos["arm_left_1_joint"] = 0;
-      ipos["arm_left_2_joint"] = 0;
-      ipos["arm_left_3_joint"] = 0.0;
-      ipos["arm_left_4_joint"] = 0.1;
-      ipos["arm_left_5_joint"] = 0.0;
-      ipos["arm_left_6_joint"] = 0;
-      ipos["arm_left_7_joint"] = 0.0;
+      ipos["arm_left_1_joint"] = -1.2236;
+      ipos["arm_left_2_joint"] = 1.1932;
+      ipos["arm_left_3_joint"] = 0.0675;
+      ipos["arm_left_4_joint"] = -1.3017;
+      ipos["arm_left_5_joint"] = 1.2723;
+      ipos["arm_left_6_joint"] = -0.7174;
+      ipos["arm_left_7_joint"] =  -0.0193;
 
 
       ROS_ERROR("you're here");
 
 
-      //end_pos << 0.4, 0.2762, 0.0, -1.3348, 0.0, 1.4959, 0.0;
+      //  end_pos << -1.2236 , 1.1932, 0.0675, -1.3017, 1.2723, -0.7174, -0.0193; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
+
       env_->setState(ipos);
       ROS_ERROR("you're here");
 
