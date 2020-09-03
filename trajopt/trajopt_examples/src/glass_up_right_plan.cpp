@@ -88,10 +88,10 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
 
   end_pos.resize(pci.kin->numJoints()); //également
   if (sign ==1){
-  end_pos << -1.2236 , 1.1932, 0.0675, -1.3017, 1.2723, -0.7174, -0.0193; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
+  end_pos << -1.5 , 1.5707,  0, 0, 0, 0, 0; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
   }
   else {
-  end_pos << -0.136 , 1.1932, 0.0675, -1.3017, 1.2723, -0.7174, -0.0193; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
+  end_pos << 0 , 1.5707, 0, 0, 0, 0, 0; //POSITION FINALE A ne pas MODIFIER A SOUHAIT.  
   }
   pci.init_info.type = InitInfo::GIVEN_TRAJ;
   pci.init_info.data = TrajArray(steps_, pci.kin->numJoints());// aussi
@@ -129,7 +129,7 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
   pci.cost_infos.push_back(collision);
 
   // Populate Constraints
-  double delta = 0.2 / pci.basic_info.n_steps;
+  double delta = 1 / pci.basic_info.n_steps;
   for (auto i = 0; i < pci.basic_info.n_steps; ++i)
   {
     std::shared_ptr<CartPoseTermInfo> pose = std::shared_ptr<CartPoseTermInfo>(new CartPoseTermInfo);
@@ -138,18 +138,18 @@ TrajOptProbPtr cppMethod()  //la bonne méthode : cpp
     pose->link = "wrist_left_ft_tool_link";
     
     pose->timestep = i;
-    pose->xyz = Eigen::Vector3d(0.0,sign*(-0. + delta * i), 0);
+    pose->xyz = Eigen::Vector3d(0 ,sign*(1 + delta * i), 0.3);
     pose->wxyz = Eigen::Vector4d(0.0, 0.0, 1.0, 0.0);
     
     if (i == (pci.basic_info.n_steps - 1) || i == 0)
     {
       pose->pos_coeffs = Eigen::Vector3d(10, 10, 10);
-      pose->rot_coeffs = Eigen::Vector3d(0, 0, 0);  //CONTRAINTES SUR LA ROTATION
+      pose->rot_coeffs = Eigen::Vector3d(0, 0, 0);  //
     }
     else
     {
       pose->pos_coeffs = Eigen::Vector3d(0, 0, 0);
-      pose->rot_coeffs = Eigen::Vector3d(0, 0, 0);  //CONTRAINTES SUR LA ROTATION
+      pose->rot_coeffs = Eigen::Vector3d(0, 0, 0);  //
     }
     pci.cnt_infos.push_back(pose);
   }
@@ -245,13 +245,13 @@ while(ros::ok())
       std::unordered_map<std::string, double> ipos;
      
 
-      ipos["arm_left_1_joint"] = 0.136;
-      ipos["arm_left_2_joint"] = 1.1932;
-      ipos["arm_left_3_joint"] = 0.0675;
-      ipos["arm_left_4_joint"] = -1.3017;
-      ipos["arm_left_5_joint"] = 1.2723;
-      ipos["arm_left_6_joint"] = -0.7174;
-      ipos["arm_left_7_joint"] =  -0.0193;
+      ipos["arm_left_1_joint"] = 0;
+      ipos["arm_left_2_joint"] = 1.5707;
+      ipos["arm_left_3_joint"] =  0;
+      ipos["arm_left_4_joint"] =  0;
+      ipos["arm_left_5_joint"] =  0;
+      ipos["arm_left_6_joint"] =  0;
+      ipos["arm_left_7_joint"] =   0;
 
       ROS_ERROR("you're here");
 
@@ -358,13 +358,13 @@ while(ros::ok())
       std::unordered_map<std::string, double> ipos;
      
 
-      ipos["arm_left_1_joint"] = -1.2236;
-      ipos["arm_left_2_joint"] = 1.1932;
-      ipos["arm_left_3_joint"] = 0.0675;
-      ipos["arm_left_4_joint"] = -1.3017;
-      ipos["arm_left_5_joint"] = 1.2723;
-      ipos["arm_left_6_joint"] = -0.7174;
-      ipos["arm_left_7_joint"] =  -0.0193;
+      ipos["arm_left_1_joint"] =  -1.5;
+      ipos["arm_left_2_joint"] = 1.5707;
+      ipos["arm_left_3_joint"] =  0;
+      ipos["arm_left_4_joint"] =  0;
+      ipos["arm_left_5_joint"] =  0;
+      ipos["arm_left_6_joint"] =  0;
+      ipos["arm_left_7_joint"] =   0;
 
 
       ROS_ERROR("you're here");
